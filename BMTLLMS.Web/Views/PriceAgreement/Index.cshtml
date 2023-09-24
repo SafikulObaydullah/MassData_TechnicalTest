@@ -1,0 +1,204 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!---Js Files--->
+<script src="~/commonui/js/configuration/priceagreement.js?v=@DateTime.Now.ToString("yymmddHHmmss")"></script>
+<!-- Page header -->
+<div class="page-header d-print-none headerPaddingRemove">
+   <div class="container-xl">
+      <div class="row g-2 align-items-center">
+         <div class="col">
+            <h2 class="page-title">
+               Price Agreement
+            </h2>
+         </div>
+         <!-- Page title actions -->
+         <div class="col-auto ms-auto d-print-none">
+            <div class="btn-list">
+               @*<a href="#" data-toggle="modal" onclick="AddNew()" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
+                  Save
+               </a>*@
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Page body -->
+<div class="page-body pageBodyPaddingRemove">
+   <div class="container-xl">
+      <!--New Entry-->
+      <div class="card">
+         <div class="card-header">
+            <h4 class="card-title">New Agreement </h4>
+         </div>
+         <div class="card-body">
+            <div class="row">
+               <div class="col-xl-4">
+                  <div class="mb-3">
+                     <label class="form-label">ID</label>
+                     <input type="text" disabled class="form-control" id="txtId"> 
+                     <input type="text" hidden id="txtChildId"> 
+                  </div>
+               </div>
+               <div class="col-xl-4">
+                  <div class="mb-3">
+                     <label class="form-label required">Customer</label>
+                     <input type="text" id="ddlCustomer" required class="form-control ddlBox" style="width:100%;height:38px;">
+                  </div>
+               </div>
+               <div class="col-xl-4">
+                  <div class="mb-3">
+                     <label class="form-label required">Date Of Agreement</label>
+                     <input type="text" id="txtDateOfAgreement" class="form-control  Kdatepicker" style="width:100%;height:38px;" placeholder="MM/DD/YYYY">
+                  </div> 
+               </div>
+               <div class="col-xl-4">
+                  <div class="mb-3">
+                     <label class="form-label">Attachment Agreement</label>
+                     <input type="file" id="txtattachment" class="form-control" style="width:100%;height:38px;" placeholder="MM/DD/YYYY">
+                  </div> 
+               </div>
+               <div class="col-xl-4">
+                  <div class="mb-3">
+                     <label class="form-label required">Effective From</label>
+                     <input type="text" id="txtEffectiveFrom" class="form-control  Kdatepicker" style="width:100%;height:38px;" placeholder="MM/DD/YYYY" required>
+                  </div>
+               </div>
+               <div class="col-xl-4">
+                  <div class="mb-3">
+                     <label class="form-label required">Effective To</label>
+                     <input type="text" id="txtEffectiveTo" class="form-control  Kdatepicker" style="width:100%;height:38px;" placeholder="MM/DD/YYYY" required>
+                  </div>
+               </div>
+               <div class="col-xl-4">
+                  <div class="mb-3">
+                     <label class="form-label">Signee ID</label>
+                     <input type="text" id="txtSigneeID" class="form-control">
+                  </div>
+               </div>
+               <div class="col-xl-4">
+                  <div class="mb-3">
+                     <label class="form-label required">Currency</label>
+                     <input type="text" id="ddlCurrency" class="form-control comboBox" style="width:100%;height:38px;">
+                  </div>
+               </div>
+               <div class="col-xl-4">
+                  <div class="mb-3">
+                     <label class="form-label required">Test Standard</label>
+                     <input type="text" id="ddlTestStandard" class="form-control" style="width:100%;height:38px;" required>
+                  </div>
+               </div>
+               <div class="col-xl-8">
+                  <div class="mb-3">
+                     <label class="form-label">Remarks</label>
+                     <input type="text" class="form-control" id="txtRemarks">
+                  </div>
+               </div>
+               <div class="col-xl-4">
+                  <div class="mb-3"> 
+                     <label class="form-label"></label>
+                     <button id="btnAdd" class="btn btn-success mt-3 mb-3" onclick="AddPriceAgreement()" style="float:right;" >Add</button>
+                  </div>
+               </div>
+               <div id="divtestStandard" class="table-responsive">
+                  <table class="table table-vcenter card-table">
+                     <tr>
+                        <th>SL</th>
+                        <th>Currency</th>
+                        <th>Test Standard</th>
+                        <th>Regular Price</th>
+                        <th>ExpressPrice</th>
+                        <th>Action</th>
+                     </tr> 
+                  </table>
+               </div>
+               <div class="col-xl-11">
+                  <div class="mb-3"> 
+                     <label class="form-label"></label>
+                     <button id="btnSave" class="btn btn-success mt-3 mb-3" onclick="SaveAgreement()" style="float:right;">Save</button>
+                  </div>
+               </div>
+               <div class="col-xl-1">
+                  <div class="mb-3"> 
+                     <label class="form-label"></label>
+                     <button id="btnClear" class="btn btn-danger mt-3 mb-3" onclick="ClearAgreement()" style="float:right;">Clear</button>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!--Search-->
+      <div class="card">
+         <div class="card-header">
+            <h4 class="card-title">Search Agreement </h4>
+         </div>
+         <div class="card-body">
+                 <div class="row">
+                  <div class="col-xl-4">
+                  <div class="mb-3">
+                     <label class="form-label">Customer Name</label>
+                     <input type="text" id="ddlSearchCustomer" class="form-control comboBox" placeholder="Enter Customer Name" style="width:100%;height:38px;">
+                  </div>
+               </div> 
+                  <div class="col-xl-4">
+                     <div class="mb-3">
+                     <label class="form-label">Agreement From Date </label>
+                     <input type="date" id="txtSearchAgreementFromDate" class="form-control combobox Kdatepicker" style="width:100%;height:38px;" placeholder="From Date">
+                     </div>
+                  </div>
+                  <div class="col-xl-4">
+                     <div class="mb-3">
+                     <label class="form-label">Agreement To Date </label>
+                     <input type="date" id="txtSearchAgreementToDate" class="form-control combobox Kdatepicker" style="width:100%;height:38px;" placeholder="To Date">
+                     </div>
+                  </div>
+                  </div>
+             <div class="row">
+               <div class="col-xl-4">
+                  <div class="mb-3">
+                     <label class="form-label">Effective From Date </label>
+                     <input type="date" id="txtSearchEffectiveFromDate" class="form-control combobox Kdatepicker" style="width:100%;height:38px;" placeholder="MM/DD/YYYY">
+                  </div>
+               </div>
+               <div class="col-xl-4">
+                  <div class="mb-3">
+                     <label class="form-label">Effective To Date </label>
+                     <input type="date" id="txtSearchEffectiveToDate" class="form-control combobox Kdatepicker" style="width:100%;height:38px;" placeholder="MM/DD/YYYY">
+                  </div>
+               </div>
+               @*<div class="col-xl-3">
+                  <div class="mb-3" style="float:right;padding-right: 150px;margin-top: 27px;">
+                     <a href="#" style="visibility:hidden" onclick="ClearAll()" class="btn btn-danger d-none d-sm-inline-block">
+                        Clear
+                     </a>
+                  </div>
+               </div>*@
+               <div class="col-xl-3">
+                  <div class="mb-3" style="float:right;padding-right: 150px;margin-top: 27px;">
+                     <a href="#" id="btnSearch" onclick="GetPriceAgreementBySearchList()" class="btn btn-primary d-none d-sm-inline-block">
+                        Search
+                     </a>
+                  </div>
+               </div>
+               <div class="col-xl-1">
+                  <div class="mb-3" style="float:right;padding-right: 150px;margin-top: 27px;">
+                     <a href="#" id="btnClear" onclick="ClearAll()" class="btn btn-danger d-none d-sm-inline-block">
+                        Clear
+                     </a>
+                  </div>
+               </div>
+            </div>
+            </div>
+            <div class="page-body pageBodyPaddingRemove">
+               <div class="container-xl">
+               <div id="gridSearch" style="height: 500px;"></div>
+               </div>
+            </div>
+         </div>
+   </div>
+</div>
+
+

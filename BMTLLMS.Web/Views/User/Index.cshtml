@@ -1,0 +1,172 @@
+﻿@{
+   ViewData["Title"] = "Index";
+   Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<!---Js Files--->
+<script src="~/commonui/js/configuration/user.js?v=@DateTime.Now.ToString("yymmddHHmmss")"></script>
+<!-- Page header -->
+<div class="page-header d-print-none headerPaddingRemove">
+   <div class="container-xl">
+      <div class="row g-2 align-items-center">
+         <div class="col">
+            <h2 class="page-title">
+               User Information
+            </h2>
+         </div>
+         <!-- Page title actions -->
+         <div class="col-auto ms-auto d-print-none">
+            <div class="btn-list">
+
+               <a href="#" data-toggle="modal" onclick="AddNew()" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                  Create New User
+               </a>
+
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!-- Page body -->
+<div class="page-body pageBodyPaddingRemove">
+   <div class="container-xl">
+      <div id="gridTable"></div>
+   </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="mdlUserReg" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Create New User</h5> <span id="spanParentID" style="display:none">0</span>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <div class="row" style="justify-content: center;">
+               <div class="col-md-6">
+                  <label class="form-label required">Name</label> <input id="name" class="form-control comboBox" style="width:100%; height:38px" required />
+               </div>
+               <div class="col-md-6">
+                  <label class="form-label required">User Name</label> <input id="UserName" class="form-control comboBox" style="width:100%; height:38px" required />
+               </div>
+            </div>
+            <div class="row g-3 mt-0" style="justify-content: center;">
+               <div class="col-md-6">
+                  <label class="form-label required">Email</label> <input id="Email" class="form-control" style="width:100%" required />
+               </div>
+               <div class="col-md-6">
+                  <label class="form-label required">Designation</label> <input id="Designation" class="form-control comboBox" style="width:100%" required />
+               </div>
+            </div>
+            <div class="row g-3 mt-0" style="justify-content: center;">
+               <div class="col-md-6" id="divPassword">
+                  <label class="form-label required">Password</label> <input id="Password" class="form-control" style="width:100%" required />
+               </div>
+               <div class="col-md-6">
+                  <label class="form-label required">UserType</label> <input id="ddlUserTypeAttribute" class="form-control comboBox" style="width:100%;height:38px" required />
+               </div>
+            </div>
+            <div class="row g-3 mt-0" style="justify-content: center;">
+               <div class="col-md-6">
+                  <label class="form-label required">Section</label> <input id="ddlUserSection" class="form-control comboBox" style="width:100%;height:38px" required />
+               </div>
+               <div class="col-md-6" style="margin-top:42px;">
+                  <label class="form-label"></label>
+                  <label class="form-check form-check-inline" style="position:absolute;bottom:26px;">
+                     <input class="form-check-input" type="checkbox" id="isActive" checked>
+                     <span class="form-check-label">Active</span>
+                  </label>
+               </div>
+            </div> 
+         </div>
+         <div class="modal-footer">
+            <button type="button" id="btnSave" class="btn btn-ghost-primary active w-10" onclick="Save()">Save</button>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+
+
+
+<!--Edit Modal -->
+<div class="modal fade" id="editModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Edit User Information</h5> <span id="editParentID" style="display:none">0</span>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <div class="row" style="justify-content: center;">
+               <div class="col-md-6">
+                  <label class="form-label required">Name</label> <input id="txtName" class="form-control comboBox" style="width:100%; height:38px" required />
+               </div>
+               <div class="col-md-6">
+                  <label class="form-label required">User Name</label> <input id="txtUserName" class="form-control comboBox" style="width:100%; height:38px" required />
+               </div>
+            </div>
+            <div class="row g-3 mt-0" style="justify-content: center;">
+               <div class="col-md-6">
+                  <label class="form-label required">Email</label> <input id="txtEmail" class="form-control" style="width:100%" required />
+               </div>
+               <div class="col-md-6">
+                  <label class="form-label required">Designation</label> <input id="txtDesignation" class="form-control comboBox" style="width:100%" required />
+               </div>
+            </div>
+            <div class="row g-3 mt-0" style="justify-content: center;">
+               <div class="col-md-6">
+                  <label class="form-label required">UserType</label> <input id="txtddlUserTypeAttribute" class="form-control comboBox" style="width:100%;height:38px" required />
+               </div>
+               <div class="col-md-6">
+                  <label class="form-label required">Section</label> <input id="txtddlUserSection" class="form-control comboBox" style="width:100%;height:38px" required />
+               </div>
+            </div>
+            
+            <div class="row g-3 mt-0" style="justify-content: left;">
+               <div class="col-md-6" style="margin-top:42px;">
+                  <label class="form-label"></label>
+                  <label class="form-check form-check-inline" style="position:absolute;bottom:26px;">
+                     <input class="form-check-input" type="checkbox" id="rdisActive" checked>
+                     <span class="form-check-label">Active</span>
+                  </label>
+               </div>
+            </div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" id="EditBtnSave" class="btn btn-ghost-primary active w-10" onclick="Update()">Save</button>
+         </div>
+      </div>
+   </div>
+</div>
+<!--Change Password Modal-->
+<div class="modal fade" id="ChangPasswordModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Edit User Information</h5> <span id="spanChangeParentID" style="display:none">0</span>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <div class="row" style="justify-content: center;">
+               <div class="col-md-6">
+                  <label class="form-label required">Name</label> <input id="txtChangeName" class="form-control comboBox" style="width:100%; height:38px" required />
+               </div>
+               <div class="col-md-6" id="divPassword">
+                  <label class="form-label required">Password</label> <input id="txtChangePassword" class="form-control" style="width:100%" required />
+               </div>
+            </div> 
+         </div>
+         <div class="modal-footer">
+            <button type="button" id="BtnChange" class="btn btn-ghost-primary active w-10" onclick="ChangePassword()">Change Password</button>
+         </div>
+      </div>
+   </div>
+</div>
+
+
