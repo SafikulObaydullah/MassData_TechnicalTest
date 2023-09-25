@@ -5,6 +5,7 @@ using BMTLLMS.Domain.ViewModel.Response;
 using BMTLLMS.Repository.Contracts;
 using BMTLLMS.Repository.Implementations;
 using BMTLLMS.Service.Contracts;
+using MassData.Domain.ViewModel.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,11 @@ namespace BMTLLMS.Service.Implementations
       public IEnumerable<DocUploadVM> GetDocUpload(Int64 Id)
       {
          return _docUploadRepository.GetDocUpload(Id);
-      } 
+      }
+
+      public SaveVM GlobalFileUrl(GlobalFileUrl obj)
+      {
+         return _docUploadRepository.GlobalFileUrl(obj);
+      }
    }
 }

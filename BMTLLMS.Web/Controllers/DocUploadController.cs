@@ -4,8 +4,7 @@ using BMTLLMS.Domain.ViewModel;
 using BMTLLMS.Domain.ViewModel.Request;
 using BMTLLMS.Domain.ViewModel.Response;
 using BMTLLMS.Service.Contracts;
-using MassData.Domain.ViewModel.Request;
-using MassData.Web.Controllers.Data.Entity;
+using MassData.Domain.ViewModel.Request; 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.WindowsAzure.Storage;
@@ -81,7 +80,7 @@ namespace BMTLLMS.Web.Controllers
          }
          [HttpPost]
          [Route("UploadFile")]
-         public async Task<IActionResult> UploadFile(IList<IFormFile> files, long accountId, string tableReferrence, long documentTypeId, long businessUnitId, long createdBy)
+         public async Task<IActionResult> UploadFile(IList<IFormFile> files, string ReferrenceNo, Int64 documentTypeId, long createdBy)
       {
          try
          {
@@ -120,9 +119,7 @@ namespace BMTLLMS.Web.Controllers
                   var cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(filename);
                   cloudBlockBlob.Properties.ContentType = file.ContentType;
 
-                  await cloudBlockBlob.UploadFromStreamAsync(file.OpenReadStream());
-
-                  // insert into iBOSDDD Database
+                  await cloudBlockBlob.UploadFromStreamAsync(file.OpenReadStream()); 
 
                   CloudBlockBlob blockBlob = cloudBlobContainer.GetBlockBlobReference(filename);
                   await blockBlob.FetchAttributesAsync();
@@ -130,19 +127,17 @@ namespace BMTLLMS.Web.Controllers
                   if (!string.IsNullOrEmpty(blockBlob.Name))
                   {
                      GlobalFileUrl obj = new GlobalFileUrl
-                     {
-                        IntAccountId = accountId,
-                        IntBusinessUnitId = businessUnitId,
-                        StrTableReferrence = tableReferrence,
-                        StrRefferenceDescription = "Dcoument file for " + tableReferrence,
-                        IntDocumentTypeId = documentTypeId,
-                        StrFileServerId = blockBlob.Name,
-                        StrDocumentName = file.FileName,
+                     { 
+                        ReferrenceNo = ReferrenceNo,
+                        ReferenceDescription = "Dcoument file for " + ReferrenceNo,
+                        DocumentTypeId = documentTypeId,
+                        FileServerId = blockBlob.Name,
+                        DocumentName = file.FileName,
                         NumFileSize = Convert.ToDecimal(file.Length),
-                        StrFileExtension = Path.GetExtension(file.FileName),
-                        StrServerLocation = "Azure File Server",
-                        IntCreatedBy = createdBy,
-                        DteCreatedAt = DateTime.Now,
+                        FileExtension = Path.GetExtension(file.FileName),
+                        ServerLocation = "Azure File Server",
+                        Creator = createdBy,
+                        CreationDate = DateTime.Now,
                      };
                      _DocUploadFacade.GlobalFileUrl(obj);
                      //await _db.GlobalFileUrls.AddAsync(obj);
@@ -150,7 +145,7 @@ namespace BMTLLMS.Web.Controllers
 
                      FileResponse response = new FileResponse
                      {
-                        globalFileUrlId = obj.IntDocumentId,
+                        globalFileUrlId = obj.ID,
                         fileName = file.FileName
                      };
                      responses.Add(response);

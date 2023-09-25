@@ -8,21 +8,19 @@ namespace MassData.Domain.ViewModel.Request
 {
    public partial class GlobalFileUrl
    {
-      public long IntDocumentId { get; set; }
-      public string StrTableReferrence { get; set; } = null!;
-      public string StrFileServerId { get; set; } = null!;
-      public string? StrRefferenceDescription { get; set; }
-      public long? IntDocumentTypeId { get; set; }
-      public string StrDocumentName { get; set; } = null!;
-      public decimal NumFileSize { get; set; }
-      public string StrFileExtension { get; set; } = null!;
-      public string? StrServerLocation { get; set; }
-      public long IntAccountId { get; set; }
-      public long IntBusinessUnitId { get; set; }
-      public DateTime DteCreatedAt { get; set; }
-      public long? IntCreatedBy { get; set; }
-      public DateTime? DteUpdatedAt { get; set; }
-      public long? IntUpdatedBy { get; set; }
-      public bool? IsActive { get; set; }
+      public Int64 ID { get; set; }
+      public string? ReferrenceNo { get; set; } 
+      public string? FileServerId { get; set; }
+      public string? ReferenceDescription { get; set; }
+      public Int64? DocumentTypeId { get; set; }
+      public string? DocumentName { get; set; }
+      public decimal? NumFileSize { get; set; }
+      public string? FileExtension { get; set; }
+      public string? ServerLocation { get; set; }
+      public Boolean? IsActive { get; set; }
+      public Int64 Creator { get; set; }
+      public DateTime? CreationDate { get; set; }
+      public Int64? Modifier { get; set; }
+      public DateTime? ModificationDate { get; set; }
    }
 }
