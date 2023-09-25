@@ -32,6 +32,11 @@ namespace BMTLLMS.Web.Controllers
             return View();
          }
          [Authorize]
+         public IActionResult FileUpload()
+         {
+            return View();
+         }
+         [Authorize]
          public JsonResult GetDocUpload()
          {
            var response = new DocUploadResponseVM();
@@ -80,88 +85,88 @@ namespace BMTLLMS.Web.Controllers
          }
          [HttpPost]
          [Route("UploadFile")]
-         public async Task<IActionResult> UploadFile(IList<IFormFile> files, string ReferrenceNo, Int64 documentTypeId, long createdBy)
-      {
-         try
+         public async Task<IActionResult> UploadFile(CreateFileUploadVM model)
          {
-            string filename = string.Empty;
-            long maxFileSize = 1 * 1024 * 1024; // 1 MB
-            List<FileValidationError> errors = new List<FileValidationError>();
-            List<FileResponse> responses = new List<FileResponse>();
+               var user = User.Claims.ToList();
+               model.Creator = Convert.ToInt64(user[1].Value);
+             try
+             {
+               string filename = string.Empty;
+               long maxFileSize = 1 * 1024 * 1024; // 1 MB
+               List<FileValidationError> errors = new List<FileValidationError>();
+               List<FileResponse> responses = new List<FileResponse>();
 
-            foreach (var file in files)
-            {
-               if (file.Length > maxFileSize)
+               foreach (var file in model.files)
                {
-                  long fileSize = file.Length / (1024 * 1024);
-                  FileValidationError error = new FileValidationError
+                  if (file.Length > maxFileSize)
                   {
-                     FileName = file.Name,
-                     Message = "Maximum File Size Allowed (1MB) Your File Size (" + fileSize + "MB)"
-                  };
-                  errors.Add(error);
-               }
-            }
-
-            if (errors.Count > 0)
-            {
-               return NotFound(errors);
-            }
-            else
-            {
-               foreach (var file in files)
-               {
-                  filename = DateTime.Now.Ticks.ToString() + "_" + (file.FileName == "blob" ? "blob.jpg" : file.FileName);
-
-                  var cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
-                  var cloudBlobContainer = cloudBlobClient.GetContainerReference("erpdata");
-
-                  var cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(filename);
-                  cloudBlockBlob.Properties.ContentType = file.ContentType;
-
-                  await cloudBlockBlob.UploadFromStreamAsync(file.OpenReadStream()); 
-
-                  CloudBlockBlob blockBlob = cloudBlobContainer.GetBlockBlobReference(filename);
-                  await blockBlob.FetchAttributesAsync();
-
-                  if (!string.IsNullOrEmpty(blockBlob.Name))
-                  {
-                     GlobalFileUrl obj = new GlobalFileUrl
-                     { 
-                        ReferrenceNo = ReferrenceNo,
-                        ReferenceDescription = "Dcoument file for " + ReferrenceNo,
-                        DocumentTypeId = documentTypeId,
-                        FileServerId = blockBlob.Name,
-                        DocumentName = file.FileName,
-                        NumFileSize = Convert.ToDecimal(file.Length),
-                        FileExtension = Path.GetExtension(file.FileName),
-                        ServerLocation = "Azure File Server",
-                        Creator = createdBy,
-                        CreationDate = DateTime.Now,
-                     };
-                     _DocUploadFacade.GlobalFileUrl(obj);
-                     //await _db.GlobalFileUrls.AddAsync(obj);
-                     //await _context.SaveChangesAsync();
-
-                     FileResponse response = new FileResponse
+                     long fileSize = file.Length / (1024 * 1024);
+                     FileValidationError error = new FileValidationError
                      {
-                        globalFileUrlId = obj.ID,
-                        fileName = file.FileName
+                        FileName = file.Name,
+                        Message = "Maximum File Size Allowed (1MB) Your File Size (" + fileSize + "MB)"
                      };
-                     responses.Add(response);
-                  };
-
+                     errors.Add(error);
+                  }
                }
-               return Ok(responses);
-            }
+
+               if (errors.Count > 0)
+               {
+                  return NotFound(errors);
+               }
+               else
+               {
+                  foreach (var file in model.files)
+                  {
+                     filename = DateTime.Now.Ticks.ToString() + "_" + (file.FileName == "blob" ? "blob.jpg" : file.FileName);
+
+                     var cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
+                     var cloudBlobContainer = cloudBlobClient.GetContainerReference("erpdata");
+
+                     var cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(filename);
+                     cloudBlockBlob.Properties.ContentType = file.ContentType;
+
+                     await cloudBlockBlob.UploadFromStreamAsync(file.OpenReadStream()); 
+
+                     CloudBlockBlob blockBlob = cloudBlobContainer.GetBlockBlobReference(filename);
+                     await blockBlob.FetchAttributesAsync();
+
+                     if (!string.IsNullOrEmpty(blockBlob.Name))
+                     {
+                        GlobalFileUrl obj = new GlobalFileUrl
+                        { 
+                           ReferrenceNo = model.ReferrenceNo,
+                           ReferenceDescription = "Dcoument file for " + model.ReferrenceNo,
+                           DocumentTypeId = model.documentTypeId,
+                           FileServerId = blockBlob.Name,
+                           DocumentName = file.FileName,
+                           NumFileSize = Convert.ToDecimal(file.Length),
+                           FileExtension = Path.GetExtension(file.FileName),
+                           ServerLocation = "Azure File Server",
+                           Creator = model.Creator,
+                           CreationDate = DateTime.Now,
+                        };
+                        _DocUploadFacade.GlobalFileUrl(obj);
+                        //await _db.GlobalFileUrls.AddAsync(obj);
+                        //await _context.SaveChangesAsync();
+
+                        FileResponse response = new FileResponse
+                        {
+                           globalFileUrlId = obj.ID,
+                           fileName = file.FileName
+                        };
+                        responses.Add(response);
+                     };
+
+                  }
+                  return Ok(responses);
+               }
          }
          catch (Exception e)
          {
             _logger.LogError(e, "Error");
             throw new Exception("internal server error");
          }
-      }
-
-    }
-
+         } 
+    } 
 }
