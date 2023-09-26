@@ -1,24 +1,48 @@
 ﻿
 var FileUploadDataList = []
+var UserName = "";
+var UserTypeId = "";
+//var UserId = "";
+//var UserDesignation = "";
+//var UserSectionId = "";
+//var user = User.Claims.ToList();
+//if (user.Count > 0) {
+//   UserName = user[0].Value;
+//   UserId = user[1].Value;
+//   UserDesignation = user[2].Value;
+//   UserTypeId = user[3].Value;
+//   UserSectionId = user[4].Value;
+//} 
 
 
 $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
-$(document).ready(function () {
-
-   $("#txtFile").kendoUpload({
-   }).data("kendoUpload");
-   DocumentFileLoad();
+$(document).ready(function () { 
+   if (UserTypeId == 2) {
+      $("#btnDelete").hide();
+   }
+   LoadInitialData();
 });
-
-function DocumentFileLoad(){
-
+function DeleteGlobalFileUrl(id) { 
    $.ajax({
-      url: "/DocUpload/GetFileUpload",
+      url: "/DocUpload/DeleteGlobalFileUrl?id=" + id,
+      type: "POST",
+      dataType: "json",
+      data: {},
+      success: function (data) {
+         toastr.success(data.message, 'Deleted Successfully'); 
+         LoadInitialData(); 
+      }
+   });
+}
+function LoadInitialData() {
+   $.ajax({
+      url: "/DocUpload/GetInitialData",
       method: "GET",
       dataType: "json",
       success: function (data) {
          if (data.statusCode = "200") {
-            FileUploadDataList = data.data;
+            FileUploadDataList = data.globalFileUrl;
+            console.log(FileUploadDataList);
             FileUploadDataBind(FileUploadDataList);
          }
          else {
@@ -29,11 +53,10 @@ function DocumentFileLoad(){
          console.log("Error:", textStatus, errorThrown);
       }
    });
-
 }
 function FileUploadDataBind(data) {
    var i = 1;
-   _.map(FileUploadDataList, function (o) {
+   _.map(data, function (o) {
       o.sl = i;
       i++;
    });
@@ -42,7 +65,7 @@ function FileUploadDataBind(data) {
       sortable: true,
       toolbar: ["search"],
       search: {
-         fields: ["name"]
+         fields: ["referrenceNo"]
       },
       pageable: {
          pageSize: 15,
@@ -60,8 +83,10 @@ function FileUploadDataBind(data) {
             }
          },
          {
-            title: "File Name", 
-            field: "file", width: 100,
+            title: "File Name",
+            field: "documentName",
+            template: '<img src="#=documentName#" alt="#=documentName#" />',
+            width: 100,
             attributes: {
                style: "text-align: left;"
             },
@@ -85,11 +110,11 @@ function FileUploadDataBind(data) {
                style: "text-align: left;"
             },
             headerAttributes: { style: "text-align: left;font-weight: bold;background-color:#C2DFFF" }
-         }, 
+         },
          {
             title: "Action",
-            template: "<button class='btn btn-ghost-info active w-10'  title='Edit' onclick='Edit(#:id#)'><span class='k-icon k-i-edit'></span></button>",
-            field: "", width: 40,
+            template: "<button class='btn btn-ghost-info active w-10'  title='Edit' onclick='Edit(#:id#)'><span class='k-icon k-i-edit'></span></button><button id='btnDelete' class='btn btn-ghost-info active w-10'  title='Delete' onclick='DeleteGlobalFileUrl(#:id#)'><span class='k-icon k-i-delete'></span></button>",
+            field: "", width: 80,
             attributes: {
                style: "text-align: center;"
             },
@@ -103,50 +128,107 @@ function validateNumber(input) {
    return /^\d+(\.\d+)?$/.test(input.value.trim());
 }
 function Save() {
-   var o = new Object();
-   var validate = true;
-   validate = Validate();
-   if (validate == true) {
-      o.id = $('#spanParentID').html(); 
-      o.file = $('#txtfile').val();
-      o.referrenceNo = $('#txtReferrenceNo').val();
-      o.documentTypeId = $('#txtdocumentTypeId').val(); 
-      o.isActive = $('#isActive').is(':checked') ? true : false;
-
+   var obj = new Object();
+      obj.id = $('#spanParentID').html(); 
+      obj.referrenceNo = $('#txtReferrenceNo').val();
+      obj.documentTypeId = $('#txtdocumentTypeId').val();
+      obj.isActive = $('#isActive').is(':checked') ? true : false; 
+      var fileUpload = $("#files").get(0);
+      var files = fileUpload.files;
+      var data = new FormData();
+      for (var i = 0; i < files.length; i++) {
+         data.append(files[i].name, files[i]); 
+      } 
       $.ajax({
-         url: "/DocUpload/UploadFile",
          type: "POST",
-         dataType: "json",
-         data: o,
+         url: "/DocUpload/UploadFilesAjax",
+         contentType: false,
+         processData: false,
+         data: data, 
          success: function (data) {
-            if (data.code == 200) {
-               toastr.success(data.message, 'Success');
-               DocumentFileLoad()();
-               $('#mdlUserReg').modal('hide')
-            } else {
-               toastr.warning(data.message, "Waring");
-            }
+            console.log("Data value = ",data);
+            toastr.success(data.message, 'File Upload Successfully'); 
+            LoadInitialData();
          },
-         error: function (xhr, textStatus, errorThrown) {
-            toastr.error('Error Saving', 'Error');
+         error: function () {
+            alert("There was error uploading files!");
          }
       });
-
-   }
 }
+//function Save() {
+//   debugger;
+//   var o = new Object();
+//   //const ID = document.querySelector('#spanParentID');
+//   //const fileInput = document.querySelector('#txtFile');
+//   //const ReferrenceNo = document.querySelector('#txtReferrenceNo');
+//   //const documentTypeId = document.querySelector('#txtdocumentTypeId');
+//   //const isActive = document.querySelector('#isActive');
+
+//   //const formData = new FormData();
+//   ////formData.append('ID', ID.files[0]);
+//   //formData.append('files', fileInput.files[0]);
+//   //formData.append('ReferrenceNo', ReferrenceNo.files[0]);
+//   //formData.append('documentTypeId', documentTypeId.files[0]);
+//   //formData.append('isActive', isActive.files[0]);
+
+
+
+//   var fileUpload = $("#txtFile").get(0);
+//   var files = fileUpload.files;
+//   var data = new FormData();
+//   for (var i = 0; i < files.length; i++) {
+//      data.append(files[i].files, files[i]);
+//   }
+
+
+//   var validate = true;
+//   validate = Validate();
+//   if (validate == true) {
+//      //o.id = $('#spanParentID').html();
+//      //o.files = $('#txtFile').val();
+//      //o.referrenceNo = $('#txtReferrenceNo').val();
+//      //o.documentTypeId = $('#txtdocumentTypeId').val();
+//      //o.isActive = $('#isActive').is(':checked') ? true : false;
+
+//      $.ajax({
+//         url: "/DocUpload/UploadFile",
+//         type: "POST",
+//         dataType: "json",
+//         processData: false,
+//         contentType: false,
+//         cache: false,
+//         enctype: 'multipart/form-data',
+//         async: false,
+//         data: data,
+//         success: function (data) {
+//            if (data.code == 200) {
+//               toastr.success(data.message, 'Success');
+//               DocumentFileLoad();
+//               $('#mdlUserReg').modal('hide')
+//            } else {
+//               toastr.warning(data.message, "Waring");
+//            }
+//         },
+//         error: function (xhr, textStatus, errorThrown) {
+//            toastr.error('Error Saving', 'Error');
+//         }
+//      });
+
+//   }
+//}
 function Edit(id) {
+ 
    $('#spanParentID').html(id);
    var FilterData = _.filter(FileUploadDataList, function (item) { return item.id == id });
-   $('#txtfile').val(FilterData[0].file);
-   $('#txtReferenceNo').val(FilterData[0].referrenceNo);
-   $('#txtdocumentTypeId').val(FilterData[0].documentTypeId); 
+   //$('#files').val(FilterData[0].documentName);
+   $('#txtReferrenceNo').val(FilterData[0].referrenceNo);
+   $('#txtdocumentTypeId').val(FilterData[0].documentTypeId);
    FilterData[0].isActive == false ? $('#isActive').prop('checked', false) : $('#isActive').prop('checked', true)
    $('#mdlUserReg').modal('toggle')
    $('#staticBackdropLabel').text('Edit FileUpload Information');
    $('#btnSave').text('Update');
    $('#btnSave').addClass('btn btn-ghost-info active w-10');
 }
-
 function AddNew() {
    $('#staticBackdropLabel').text('Create New FileUpload');
    $('#btnSave').removeClass('btn btn-ghost-info active w-10');
@@ -164,38 +246,24 @@ function AddNew() {
    $('#btnSave').text('Save');
    $('#btnSave').addClass('btn btn-ghost-primary active w-10');
 }
-
 function Validate() {
-   if ($('#name').val() == "") {
-      $('#name').focus();
-      toastr.warning('Please input FileUpload name');
-      return false;
-   }
-   if ($('#FileUploadLogo').val() == "") {
-      $('#FileUploadLogo').focus();
+
+   if ($('#txtFile').val() == "") {
+      $('#txtFile').focus();
       toastr.warning('Please input FileUpload Logo', 'Warning');
       return false;
    }
-   if ($('#websiteAddress').val() == "") {
-      $('#websiteAddress').focus();
-      toastr.warning('Please input valid Website Address');
+   if ($('#txtReference').val() == "") {
+      $('#txtReference').focus();
+      toastr.warning('Please input valid Reference');
       return false;
    }
-   if ($('#emailaddress').val() == "") {
-      $('#emailaddress').focus();
-      toastr.warning('Please input Email Address');
+   if ($('#txtdocumentTypeId').val() == "") {
+      $('#txtdocumentTypeId').focus();
+      toastr.warning('Please input documentTypeId');
       return false;
    }
-   if ($('#phoneNumber').val() == "") {
-      $('#phoneNumber').focus();
-      toastr.warning('Please input Phone Number');
-      return false;
-   }
-   if ($('#physicalAddress').val() == "") {
-      $('#physicalAddress').focus();
-      toastr.warning('Please input valid Physical Address');
-      return false;
-   }
+
    return true;
 }
 function checkEmptyInput(inputElement) {

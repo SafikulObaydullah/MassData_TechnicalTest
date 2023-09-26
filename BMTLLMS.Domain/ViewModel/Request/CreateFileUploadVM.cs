@@ -11,9 +11,10 @@ namespace BMTLLMS.Domain.ViewModel.Request
    public class CreateFileUploadVM
    {
       public Int64 ID { get; set; }
-      public IList<IFormFile> files { get; set; }
-      public string ReferrenceNo { get; set; } 
-      public Int64 documentTypeId { get; set; }
+      public IFormFile imagefile { get; set; }
+      public string? ImageName { get; set; }
+      public string? ReferrenceNo { get; set; } 
+      public Int64? documentTypeId { get; set; }
       public Boolean? IsActive { get; set; }
       public Int64 Creator { get; set; }
       public DateTime? CreationDate { get; set; }

@@ -15,6 +15,8 @@ namespace BMTLLMS.Service.Contracts
    {
       SaveVM SaveDocUpload(DocUploadVM obj);
       SaveVM GlobalFileUrl(GlobalFileUrl obj);
-      IEnumerable<DocUploadVM> GetDocUpload(Int64 Id); 
+      IEnumerable<DocUploadVM> GetDocUpload(Int64 Id);
+      IEnumerable<GlobalFileUrl> GetGlobalFileUrl(Int64 Id);
+      IEnumerable<GlobalFileUrl> DeleteGlobalFileUrl(Int64 Id);
    }
 }

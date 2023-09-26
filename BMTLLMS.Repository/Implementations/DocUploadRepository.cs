@@ -96,9 +96,8 @@ namespace BMTLLMS.Repository.Implementations
          var result = _db.Database.SqlQuery<DocUploadVM>("GetDocUpload_T_SP @ID", parms).ToList();
          return result;
       }
-
       public SaveVM GlobalFileUrl(GlobalFileUrl obj)
-      { 
+      {
          try
          {
             var ID = new SqlParameter { ParameterName = "ID", Value = obj.ID };
@@ -142,10 +141,10 @@ namespace BMTLLMS.Repository.Implementations
                ParameterName = "ServerLocation",
                Value = obj.ServerLocation == null ? DBNull.Value : obj.ServerLocation
             };
-            var isActive = new SqlParameter { ParameterName = "isActive", Value = obj.IsActive };
+            var isActive = new SqlParameter { ParameterName = "isActive", Value = true };
             var Creator = new SqlParameter { ParameterName = "Creator", Value = obj.Creator };
-            var result = _db.Database.SqlQuery<SaveVM>("InsertUpdateDocUpload_SP  @ID,@ReferrenceNo,@FileServerId,@ReferenceDescription,@DocumentTypeId,@DocumentName,@NumFileSize,@FileExtension,@ServerLocation,@IsActive,@Creator",
-                ID, ReferrenceNo, FileServerId, ReferenceDescription, DocumentTypeId, DocumentName,NumFileSize,FileExtension, ServerLocation, isActive, Creator).FirstOrDefault();
+            var result = _db.Database.SqlQuery<SaveVM>("InsertUpdateGlobalFileUrl_SP  @ID,@ReferrenceNo,@FileServerId,@ReferenceDescription,@DocumentTypeId,@DocumentName,@NumFileSize,@FileExtension,@ServerLocation,@IsActive,@Creator",
+                ID, ReferrenceNo, FileServerId, ReferenceDescription, DocumentTypeId, DocumentName, NumFileSize, FileExtension, ServerLocation, isActive, Creator).FirstOrDefault();
             if (result.IsSuccess == false)
             {
                result.Code = (int)ProjectCodes.Error;
@@ -176,6 +175,19 @@ namespace BMTLLMS.Repository.Implementations
             return result;
          }
       }
-       
+
+      public IEnumerable<GlobalFileUrl> GetGlobalFileUrl(long Id)
+      {
+         var parms = new SqlParameter("@ID", Id);
+         var result = _db.Database.SqlQuery<GlobalFileUrl>("GetGlobalFileUrl_SP @ID", parms).ToList();
+         return result;
+      }
+
+      public IEnumerable<GlobalFileUrl> DeleteGlobalFileUrl(long Id)
+      {
+         var parms = new SqlParameter("@ID", Id);
+         var result = _db.Database.SqlQuery<GlobalFileUrl>("DeleteGlobalFileUrl_SP @ID", parms).ToList();
+         return result;
+      }
    }
 }

@@ -29,10 +29,19 @@ namespace BMTLLMS.Service.Implementations
       {
          return _docUploadRepository.GetDocUpload(Id);
       }
-
       public SaveVM GlobalFileUrl(GlobalFileUrl obj)
       {
          return _docUploadRepository.GlobalFileUrl(obj);
+      }
+
+      public IEnumerable<GlobalFileUrl> GetGlobalFileUrl(long Id)
+      {
+         return _docUploadRepository.GetGlobalFileUrl(Id);
+      }
+
+      public IEnumerable<GlobalFileUrl> DeleteGlobalFileUrl(long Id)
+      {
+         return _docUploadRepository.DeleteGlobalFileUrl(Id);  
       }
    }
 }

@@ -2,7 +2,22 @@
    ViewData["Title"] = "Index";
    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@{
+   var UserName = "";
+   var UserTypeId = "";
+   var UserId = "";
+   var UserDesignation = "";
+   var UserSectionId = "";
+   var user = User.Claims.ToList();
+   if (user.Count > 0)
+   {
+      UserName = user[0].Value;
+      UserId = user[1].Value;
+      UserDesignation = user[2].Value;
+      UserTypeId = user[3].Value;
+      UserSectionId = user[4].Value;
+   }
+}
 <!---Js Files--->
 <script src="~/commonui/js/configuration/fileupload.js?v=@DateTime.Now.ToString("yymmddHHmmss")"></script>
 <!-- Page header -->
@@ -20,8 +35,8 @@
 
                <a href="#" data-toggle="modal" onclick="AddNew()" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                    Create New Document Upload
-               </a> 
+                  Create New Document Upload
+               </a>
             </div>
          </div>
       </div>
@@ -43,33 +58,38 @@
             <h5 class="modal-title" id="staticBackdropLabel">Create New Document Upload</h5> <span id="spanParentID" style="display:none">0</span>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
          </div>
-         <div class="modal-body">
-            <div class="row" style="justify-content: center;">
-               <div class="col-md-6">
-                  <label class="form-label">File</label>
-                  <input name="files" id="txtFile" type="file" aria-label="files" />
+         <form method="post" enctype="multipart/form-data">
+            <div class="modal-body">
+               <div class="row" style="justify-content: center;">
+                  <div class="col-md-6">
+                     <label class="form-label">File</label>
+                     @*<input name="files" id="txtFile" type="file" multiple="multiple" aria-label="files" />*@
+                     <input type="file" id="files" name="files" multiple />
+                     @*<input type="button" id="upload" value="Upload Selected Files" />*@
+                  </div>
+                  <div class="col-md-6">
+                     <label class="form-label required">ReferrenceNo</label> <input id="txtReferrenceNo" class="form-control comboBox" style="width:100%; height:37px" required />
+                  </div>
                </div>
-               <div class="col-md-6">
-                  <label class="form-label required">ReferrenceNo</label> <input id="txtReferrenceNo" class="form-control comboBox" style="width:100%; height:37px" required />
+               <div class="row g-3 mt-0" style="justify-content: center;">
+                  <div class="col-md-6">
+                     <label class="form-label required">documentTypeId</label>
+                     <input id="txtdocumentTypeId" class="form-control" style="width:100%" required />
+                  </div>
+                  <div class="col-md-6">
+                     <label class="form-label "></label>
+                     <label class="form-check form-check-inline" style="position:absolute;bottom:30px;">
+                        <input class="form-check-input" type="checkbox" id="isActive" checked>
+                        <span class="form-check-label">Active</span>
+                     </label>
+                  </div>
                </div>
             </div>
-            <div class="row g-3 mt-0" style="justify-content: center;">
-               <div class="col-md-6">
-                  <label class="form-label required">documentTypeId</label>
-                  <input id="txtdocumentTypeId" class="form-control" style="width:100%" required />
-               </div>
-               <div class="col-md-6">
-                  <label class="form-label "></label>
-                  <label class="form-check form-check-inline" style="position:absolute;bottom:30px;">
-                     <input class="form-check-input" type="checkbox" id="isActive" checked>
-                     <span class="form-check-label">Active</span>
-                  </label>
-               </div>
-            </div> 
-         </div>
-         <div class="modal-footer">
-            <button type="button" id="btnSave" class="btn btn-ghost-primary active w-10" onclick="Save()">Save</button>
-         </div>
+            <div class="modal-footer">
+               <button type="button" id="btnSave" class="btn btn-ghost-primary active w-10" onclick="Save()">Save</button>
+            </div>
+         </form>
+
       </div>
    </div>
 </div>
