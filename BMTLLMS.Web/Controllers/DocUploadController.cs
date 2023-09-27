@@ -218,9 +218,9 @@ namespace BMTLLMS.Web.Controllers
                GlobalFileUrl obj = new GlobalFileUrl 
                {  
                   ID = model.ID,
-                  ReferrenceNo = model.ReferrenceNo,
+                  ReferrenceNo = "Reference No 123",
                   ReferenceDescription = "Dcoument file for " + "refer12",
-                  DocumentTypeId = model.DocumentTypeId,
+                  DocumentTypeId = 321,
                   FileServerId = "ddd", 
                   DocumentName = file.FileName,
                   NumFileSize = Convert.ToDecimal(file.Length),
