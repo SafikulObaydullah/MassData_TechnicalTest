@@ -95,24 +95,24 @@ function FileUploadDataBind(data) {
             headerAttributes: { style: "text-align: left;font-weight: bold;background-color:#C2DFFF" }
 
          },
-         {
-            title: "ReferrenceNo",
-            field: "referrenceNo",
-            width: 150,
-            attributes: {
-               style: "text-align: left;"
-            },
-            headerAttributes: { style: "text-align: left;font-weight: bold;background-color:#C2DFFF" }
-         },
-         {
-            title: "DocumentTypeId",
-            field: "documentTypeId",
-            width: 120,
-            attributes: {
-               style: "text-align: left;"
-            },
-            headerAttributes: { style: "text-align: left;font-weight: bold;background-color:#C2DFFF" }
-         },
+         //{
+         //   title: "ReferrenceNo",
+         //   field: "referrenceNo",
+         //   width: 150,
+         //   attributes: {
+         //      style: "text-align: left;"
+         //   },
+         //   headerAttributes: { style: "text-align: left;font-weight: bold;background-color:#C2DFFF" }
+         //},
+         //{
+         //   title: "DocumentTypeId",
+         //   field: "documentTypeId",
+         //   width: 120,
+         //   attributes: {
+         //      style: "text-align: left;"
+         //   },
+         //   headerAttributes: { style: "text-align: left;font-weight: bold;background-color:#C2DFFF" }
+         //},
          {
             title: "Action",
             template: "<button class='btn btn-ghost-info active w-10'  title='Edit' onclick='Edit(#:id#)'><span class='k-icon k-i-edit'></span></button><button id='btnDelete' class='btn btn-ghost-info active w-10'  title='Delete' onclick='DeleteGlobalFileUrl(#:id#)'><span class='k-icon k-i-delete'></span></button>",
