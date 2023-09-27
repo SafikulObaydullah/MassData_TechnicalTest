@@ -64,7 +64,7 @@ namespace BMTLLMS.Web.Controllers
                     return View();
                 }
             }
-          catch(Exception ex)
+            catch(Exception ex)
             {
                 ViewBag.errormsg = "Fail to login, please try again.";
                 return View();

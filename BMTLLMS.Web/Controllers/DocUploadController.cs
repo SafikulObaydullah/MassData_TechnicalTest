@@ -184,10 +184,10 @@ namespace BMTLLMS.Web.Controllers
             var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
             filename = _environment.WebRootPath + String.Format(filename); 
             //var fPath = Path.Combine(HttpContext.Current.Server.MapPath("~/"), "Images/StdPic");
-            if (!Directory.Exists(filename))
-            {
-               Directory.CreateDirectory(filename);
-            }
+            //if (!Directory.Exists(filename))
+            //{
+            //   Directory.CreateDirectory(filename);
+            //}
 
             size += file.Length;
             using (FileStream fs = System.IO.File.Create(filename))
@@ -211,7 +211,7 @@ namespace BMTLLMS.Web.Controllers
                             .Parse(file.ContentDisposition)
                             .FileName
                             .Trim('"');
-            filename = _environment.WebRootPath + $@"\{filename}";
+            filename = _environment.WebRootPath + "/Images" + $@"\{filename}";
             size += file.Length;
             using (FileStream fs = System.IO.File.Create(filename))
             {

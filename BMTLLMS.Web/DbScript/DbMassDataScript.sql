@@ -1,6 +1,8 @@
-﻿USE [master]
-GO
+﻿--USE [master]
+--GO
 /****** Object:  Database [DbMassData]    Script Date: 9/24/2023 8:04:00 PM ******/
+--Drop Database DbMassData
+--Create Database DbMassData
 Use  [DbMassData]
 
 GO
@@ -5072,7 +5074,7 @@ CREATE TABLE [dbo].[GlobalFileUrl](
  CONSTRAINT [PK_GlobalFileUrl] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
 USE [DbMassData]
@@ -5093,7 +5095,7 @@ CREATE TABLE [dbo].[Image](
  CONSTRAINT [PK_Image] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
 USE [DbMassData]
@@ -5106,7 +5108,7 @@ GO
 
 
 ----EXEC InsertUpdateGlobalFileUrl_SP 0,'013','FileServerId','rrr',0,'ddd','dd','FileExtension','ServerLocation',1,1 
-ALTER Procedure [dbo].[InsertUpdateGlobalFileUrl_SP]
+Create Procedure [dbo].[InsertUpdateGlobalFileUrl_SP]
 (
 	@ID bigint,
 	@ReferrenceNo varchar(500),
@@ -5205,7 +5207,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-ALTER Procedure [dbo].[GetGlobalFileUrl_SP]
+Create Procedure [dbo].[GetGlobalFileUrl_SP]
 (
    @ID bigint = 0
 )
@@ -5222,7 +5224,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-ALTER Procedure [dbo].[DeleteGlobalFileUrl_SP]
+Create Procedure [dbo].[DeleteGlobalFileUrl_SP]
 (
  @ID bigint
 )
@@ -5230,3 +5232,38 @@ As
 BEGIN
    Delete From GlobalFileUrl Where ID = @ID 
 END
+GO
+
+INSERT INTO User_T(GID,Name,UserName,Email,Password,Designation,UserTypeAttributeID,UserSectionID,IsActive,Creator,CreationDate)
+VALUES (newid(),'Shakil Ahmed','admin','admin@gmail.com','/lo8sWihB8gr3JnIAtbrUQ==','General Manager',1,1,1,1,GETDATE()) 
+
+INSERT INTO User_T(GID,Name,UserName,Email,Password,Designation,UserTypeAttributeID,UserSectionID,IsActive,Creator,CreationDate)
+VALUES (newid(),'Mehedi Hasan','staff','staff@gmail.com','NERDVoBubLrgSeRSAfG8XQ==','Staff',1,1,1,1,GETDATE()) 
+
+INSERT INTO Attribute_T(GID,Name,AttributeTypeID,IsActive,Creator,CreationDate)
+VALUES (newid(),'Admin',1,1,1,GETDATE()) 
+
+INSERT INTO Attribute_T(GID,Name,AttributeTypeID,IsActive,Creator,CreationDate)
+VALUES (newid(),'User',2,1,1,GETDATE()) 
+
+INSERT INTO Attribute_Type_T(GID,Name,IsActive,Creator,CreationDate)
+VALUES (newid(),'User Role',1,1,GETDATE()) 
+
+INSERT INTO Attribute_Type_T(GID,Name,IsActive,Creator,CreationDate)
+VALUES (newid(),'Data Entry Operator',1,1,GETDATE()) 
+
+INSERT INTO Section_T(GID,Name,CompanyID,IsActive,Creator,CreationDate)
+VALUES (newid(),'Order Management',1,1,1,GETDATE()) 
+
+INSERT INTO Section_T(GID,Name,CompanyID,IsActive,Creator,CreationDate)
+VALUES (newid(),'Data Entry Operator',2,1,1,GETDATE()) 
+
+INSERT INTO Company_T(GID,Name,Logo,WebsiteAddress,EmailAddress,PhoneNumber,PhysicalAddress,Fax,LocationLat,LocationLng,IsActive,Creator,CreationDate)
+VALUES (newid(),'Mass Data Limited','logo pic','www.massdata.com','massdata@gmail.com','01322989098','Uttara, Dhaka','fax','locationLat','locationlng',1,1,GETDATE()) 
+
+INSERT INTO Company_T(GID,Name,Logo,WebsiteAddress,EmailAddress,PhoneNumber,PhysicalAddress,Fax,LocationLat,LocationLng,IsActive,Creator,CreationDate)
+VALUES (newid(),'Raven Systems Ltds','logo pic','www.raven.com','raven@gmail.com','0149902989','Mirpur Dhaka','fax','locationLat','locationlng',1,1,GETDATE()) 
+
+Select Top 1 'admin' As UserName,'123' As Pasword from User_T
+
+Select Top 1 'staff' As UserName,'12345' As Pasword From User_T

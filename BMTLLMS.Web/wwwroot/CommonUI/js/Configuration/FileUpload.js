@@ -55,7 +55,11 @@ function LoadInitialData() {
    });
 }
 function FileUploadDataBind(data) {
+  
+   var picdata = data;
+   console.log(picdata);   
    var i = 1;
+   console.log("Document Name = ", data[i].documentName);
    _.map(data, function (o) {
       o.sl = i;
       i++;
@@ -83,9 +87,11 @@ function FileUploadDataBind(data) {
             }
          },
          {
-            title: "File Name",
-            field: "documentName",
-            template: '<img src="#=documentName#" alt="#=documentName#" />',
+            //title: "File Name",
+            //field: "documentName",
+            //template: '<img src="#=documentName#" alt="#=documentName#" />',
+            
+            field: "documentName", title: "Image", template: '<img src="/Images/#=documentName#">',
             width: 100,
             attributes: {
                style: "text-align: left;"
@@ -148,6 +154,7 @@ function Save() {
          success: function (data) {
             console.log("Data value = ",data);
             toastr.success(data.message, 'File Upload Successfully'); 
+            $('#mdlUserReg').modal('hide')
             LoadInitialData();
          },
          error: function () {
