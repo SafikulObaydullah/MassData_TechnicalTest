@@ -5044,7 +5044,189 @@ BEGIN
 
 END
 GO
-USE [master]
+USE [DbMassData]
+GO
+
+/****** Object:  Table [dbo].[GlobalFileUrl]    Script Date: 9/27/2023 8:36:19 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[GlobalFileUrl](
+	[ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[ReferrenceNo] [varchar](500) NULL,
+	[FileServerId] [varchar](500) NULL,
+	[ReferenceDescription] [varchar](500) NULL,
+	[DocumentTypeId] [bigint] NULL,
+	[DocumentName] [varchar](500) NULL,
+	[NumFileSize] [decimal](18, 3) NULL,
+	[FileExtension] [varchar](500) NULL,
+	[ServerLocation] [varchar](500) NULL,
+	[IsActive] [bit] NULL,
+	[Creator] [bigint] NOT NULL,
+	[CreationDate] [datetime] NOT NULL,
+	[Modifier] [bigint] NULL,
+	[ModificationDate] [datetime] NULL,
+ CONSTRAINT [PK_GlobalFileUrl] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+USE [DbMassData]
+GO
+
+/****** Object:  Table [dbo].[Image]    Script Date: 9/27/2023 8:37:18 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Image](
+	[ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[Title] [varchar](100) NULL,
+	[ImageName] [varchar](100) NULL,
+	[ImageFile] [varchar](100) NULL,
+ CONSTRAINT [PK_Image] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+USE [DbMassData]
+GO
+/****** Object:  StoredProcedure [dbo].[InsertUpdateGlobalFileUrl_SP]    Script Date: 9/27/2023 8:38:15 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+----EXEC InsertUpdateGlobalFileUrl_SP 0,'013','FileServerId','rrr',0,'ddd','dd','FileExtension','ServerLocation',1,1 
+ALTER Procedure [dbo].[InsertUpdateGlobalFileUrl_SP]
+(
+	@ID bigint,
+	@ReferrenceNo varchar(500),
+	@FileServerId varchar(500),
+	@ReferenceDescription varchar(500),
+	@DocumentTypeId bigint,
+	@DocumentName varchar(500),
+	@NumFileSize decimal(18,3),
+	@FileExtension varchar(500), 
+	@ServerLocation varchar(500),
+    @IsActive bit,
+    @Creator bigint
+)
+
+AS
+BEGIN
+	DECLARE @IDOut BIGINT
+		,@Message VARCHAR(50),@IsSuccess bit
+
+	BEGIN TRY
+		BEGIN TRANSACTION 
+		IF (@ID > 0)
+		BEGIN  
+		     UPDATE GlobalFileUrl 
+			 SET ReferrenceNo = @ReferrenceNo,
+			 FileServerId = @FileServerId,
+			 ReferenceDescription = @ReferenceDescription,
+			 DocumentTypeId = @DocumentTypeId,
+			 DocumentName = @DocumentName,
+			 NumFileSize = @NumFileSize,
+			 FileExtension = @FileExtension, 
+			 ServerLocation = @ServerLocation,
+			 IsActive = @IsActive,
+			 Modifier = @Creator,
+			 ModificationDate = GETDATE()
+			 WHERE ID = @ID 
+			SET @IDOut = @ID
+			set @IsSuccess=1
+			SET @Message = 'Updated Successful'
+		END
+		ELSE
+		BEGIN
+			INSERT INTO GlobalFileUrl( 
+				  ReferrenceNo,
+				  FileServerId,
+				  ReferenceDescription,
+				  DocumentTypeId,
+				  DocumentName,
+				  NumFileSize,
+				  FileExtension, 
+				  ServerLocation,
+				  IsActive,
+				  Creator,
+				  CreationDate
+				)
+			VALUES ( 
+				@ReferrenceNo,
+				@FileServerId,
+				@ReferenceDescription,
+				@DocumentTypeId,
+				@DocumentName,
+				@NumFileSize,
+				@FileExtension, 
+				@ServerLocation,
+				@IsActive,
+				@Creator,
+				GETDATE()
+				)
+
+			SET @IDOut = SCOPE_IDENTITY()
+					set @IsSuccess=1
+			SET @Message = 'Save Successful'
+		END 
+		
+		COMMIT TRANSACTION
+
+		SELECT @IDOut AS ID
+			,@Message AS Message , convert(bit, @IsSuccess) as IsSuccess
+	END TRY
+
+	BEGIN CATCH
+		SELECT - 1 AS ID
+			,ERROR_MESSAGE() AS Message,convert(bit, 0) as IsSuccess
+
+		ROLLBACK TRANSACTION
+	END CATCH
+END 
+
 GO
 ALTER DATABASE [DbMassData] SET  READ_WRITE 
 GO
+USE [DbMassData]
+GO
+/****** Object:  StoredProcedure [dbo].[GetGlobalFileUrl_SP]    Script Date: 9/27/2023 8:34:51 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER Procedure [dbo].[GetGlobalFileUrl_SP]
+(
+   @ID bigint = 0
+)
+As
+BEGIN
+Select ID,ReferrenceNo,FileServerId,ReferenceDescription,DocumentTypeId,DocumentName,
+NumFileSize,FileExtension,ServerLocation,IsActive from GlobalFileUrl Where ID = @ID OR @ID = 0
+END 
+GO
+USE [DbMassData]
+GO
+/****** Object:  StoredProcedure [dbo].[DeleteGlobalFileUrl_SP]    Script Date: 9/27/2023 8:38:11 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER Procedure [dbo].[DeleteGlobalFileUrl_SP]
+(
+ @ID bigint
+)
+As 
+BEGIN
+   Delete From GlobalFileUrl Where ID = @ID 
+END
