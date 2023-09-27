@@ -58,8 +58,7 @@ function FileUploadDataBind(data) {
   
    var picdata = data;
    console.log(picdata);   
-   var i = 1;
-   console.log("Document Name = ", data[i].documentName);
+   var i = 1; 
    _.map(data, function (o) {
       o.sl = i;
       i++;
