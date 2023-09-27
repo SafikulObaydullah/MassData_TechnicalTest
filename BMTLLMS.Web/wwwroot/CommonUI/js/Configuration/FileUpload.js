@@ -87,9 +87,6 @@ function FileUploadDataBind(data) {
             }
          },
          {
-            //title: "File Name",
-            //field: "documentName",
-            //template: '<img src="#=documentName#" alt="#=documentName#" />',
             
             field: "documentName", title: "Image", template: '<img src="/Images/#=documentName#">',
             width: 100,
