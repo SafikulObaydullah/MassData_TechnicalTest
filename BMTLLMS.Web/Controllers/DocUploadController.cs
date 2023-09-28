@@ -238,6 +238,25 @@ namespace BMTLLMS.Web.Controllers
          string message = $"{files.Count} file(s) /{size}bytes uploaded successfully!";
          return Json(message);
       }
+      //[HttpGet]
+      //[Authorize]
+      //public JsonResult GetLoginUserData()
+      //{
+      //   var user = User.Claims.ToList();
+      //   var Creator = Convert.ToInt64(user[1].Value);
+      //   dynamic result = new ExpandoObject();
+      //   try
+      //   {
+      //      result.usersList = user;
+      //      result.statusMessage = StatusMessage.Success;
+      //   }
+      //   catch (Exception ex)
+      //   {
+      //      result.StatusCode = ProjectCodes.Error;
+      //      result.StatusMessage = StatusMessage.Error;
+      //   }
+      //   return Json(result);
+      //}
       [HttpGet]
       [Authorize]
       public JsonResult GetInitialData()
@@ -247,6 +266,7 @@ namespace BMTLLMS.Web.Controllers
          dynamic result = new ExpandoObject();
          try
          {
+            result.usersList = user;
             result.globalFileUrl = _DocUploadFacade.GetGlobalFileUrl(0).Where(x => x.IsActive == true).ToList();
             result.statusMessage = StatusMessage.Success;
          }
@@ -262,25 +282,28 @@ namespace BMTLLMS.Web.Controllers
       [Authorize]
       public IActionResult DeleteGlobalFileUrl(long id)
       {
-         var UserName = "";
-         var UserTypeId = "";
-         var UserId = "";
-         var UserDesignation = "";
-         var UserSectionId = "";
-         var user = User.Claims.ToList();
-         var Creator = Convert.ToInt64(user[1].Value);
-         if (user.Count > 0)
-         {
-            UserName = user[0].Value;
-            UserId = user[1].Value;
-            UserDesignation = user[2].Value;
-            UserTypeId = user[3].Value;
-            UserSectionId = user[4].Value;
-         }
-         if(UserTypeId == "2")
-         {
-            throw new Exception("You can not permited");
-         }
+         //string message = "";
+         //var UserName = "";
+         //var UserTypeId = "";
+         //var UserId = "";
+         //var UserDesignation = "";
+         //var UserSectionId = "";
+         //var user = User.Claims.ToList();
+         //var Creator = Convert.ToInt64(user[1].Value);
+         
+         //if (user.Count > 0)
+         //{
+         //   UserName = user[0].Value;
+         //   UserId = user[1].Value;
+         //   UserDesignation = user[2].Value;
+         //   UserTypeId = user[3].Value;
+         //   UserSectionId = user[4].Value;
+         //}
+         //if(UserTypeId == "2")
+         //{
+         //   message = "You can not perimitted";
+         //   throw new Exception("You can not permited");
+         //}
          return Json(_DocUploadFacade.DeleteGlobalFileUrl(id));
       }
    }

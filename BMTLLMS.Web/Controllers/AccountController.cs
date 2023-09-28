@@ -41,10 +41,7 @@ namespace BMTLLMS.Web.Controllers
                 o.Password = TextEncryptionDecryption.Encrypt(o.Password, _configurations["EncryptionKeys:Key2"].ToString());
                 var user = _accountFacade.GetAuthenticUserData(o).FirstOrDefault();
                 if (user != null)
-                {
-
-
-
+                { 
                     var claims = new[] {
                     new Claim("name", user.Name),
                     new Claim("userid", user.ID.ToString()),

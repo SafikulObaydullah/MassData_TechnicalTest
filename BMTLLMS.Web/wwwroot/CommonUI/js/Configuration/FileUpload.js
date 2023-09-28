@@ -2,6 +2,8 @@
 var FileUploadDataList = []
 var UserName = "";
 var UserTypeId = "";
+var UserList = [];
+
 //var UserId = "";
 //var UserDesignation = "";
 //var UserSectionId = "";
@@ -17,10 +19,9 @@ var UserTypeId = "";
 
 $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
 $(document).ready(function () { 
-   if (UserTypeId == 2) {
-      $("#btnDelete").hide();
-   }
+   
    LoadInitialData();
+   
 });
 function DeleteGlobalFileUrl(id) { 
    $.ajax({
@@ -28,12 +29,34 @@ function DeleteGlobalFileUrl(id) {
       type: "POST",
       dataType: "json",
       data: {},
-      success: function (data) {
+      success: function (data) { 
          toastr.success(data.message, 'Deleted Successfully'); 
-         LoadInitialData(); 
+         LoadInitialData();  
       }
    });
 }
+//function LoadGetLoginUserData() {
+//   $.ajax({
+//      url: "/DocUpload/GetLoginUserData",
+//      method: "GET",
+//      dataType: "json",
+//      success: function (data) {
+//         if (data.statusCode = "200") {
+//            UserList = data.usersList;
+//            console.log("UserTypeID = ",UserList[3].value);
+//         }
+//         else {
+
+//         }
+//      },
+//      error: function (jqXHR, textStatus, errorThrown) {
+//         console.log("Error:", textStatus, errorThrown);
+//      }
+//   });
+//}
+$('#btnDelete').click(function () {
+   $(this).hide();
+});
 function LoadInitialData() {
    $.ajax({
       url: "/DocUpload/GetInitialData",
@@ -41,9 +64,13 @@ function LoadInitialData() {
       dataType: "json",
       success: function (data) {
          if (data.statusCode = "200") {
+            UserList = data.usersList;
+            console.log("UserTypeID = ", UserList[3].value);
             FileUploadDataList = data.globalFileUrl;
-            console.log(FileUploadDataList);
             FileUploadDataBind(FileUploadDataList);
+            if (UserList[3].value == 2) { 
+               $('#btnDelete').hide();
+            }
          }
          else {
 

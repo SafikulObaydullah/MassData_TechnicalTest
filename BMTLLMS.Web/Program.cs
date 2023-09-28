@@ -12,11 +12,16 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 //using NuGet.Packaging.Signing;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 var conStr = builder.Configuration.GetConnectionString("conStr");
 Services.RegisterDependencies(builder.Services, conStr);
