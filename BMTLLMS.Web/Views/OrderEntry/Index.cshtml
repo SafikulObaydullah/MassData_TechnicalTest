@@ -1,0 +1,279 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!---Js Files--->
+<script src="~/commonui/js/configuration/orderentry.js?v=@DateTime.Now.ToString("yymmddHHmmss")"></script>
+
+
+<!-- Page header -->
+<div class="page-header d-print-none headerPaddingRemove">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">
+                    Order Entry
+                </h2>
+            </div>
+            <!-- Page title actions -->
+            <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+
+                    <a href="#" data-toggle="modal" onclick="SaveOrderEntry()" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                        Save
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*<div class="card-body">
+    <div class="row">
+        <div class="col-xl-4">
+            <div class="mb-3">*@
+
+
+<!-- Page body -->
+<div class="page-body pageBodyPaddingRemove">
+    <div class="container-xl">
+       
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="card" style="height: 100px;">
+                        <div class="demo-section wide" style="margin-top:20px">
+                            <nav id="stepper"></nav>
+                        </div>
+                    </div>
+                   
+                  
+                    <!-- Div elements for each stepper step -->
+                    <div class="card">
+                        <!-- step 1-->
+                        <div class="stepDiv" id="step1Div" style="display: none; margin:20px">
+                            <div class="row">
+                                <div class="col-xl-4">
+                                   <div class="mb-3">
+                                    <label class="form-label required">Customer Name</label>
+                                    <span id="txtId" style="display:none"></span>
+                                    <input type="text" class="form-control combobox" name="example-text-input" placeholder="Input customer name" style="width:100%; height:38px" id="cmbCustomer" required>
+
+                                    </div>
+
+                                </div>
+                                <div class="col-xl-4">
+                                    <div class="mb-3">
+                                    <label class="form-label required">Contact Person</label>
+                                    <input type="text" class="form-control" name="example-text-input" placeholder="Input contact person" id="contactPersonName" required>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4">
+                                    <div class="mb-3">
+                                    <label class="form-label required">Address</label>
+                                    <input type="text" class="form-control" name="example-text-input" placeholder="Input address" id="contactAddress" required>
+                                    </div>
+                                </div>
+                            <div class="col-xl-4">
+                                <div class="mb-3">
+                                    <label class="form-label required">Mobile No</label>
+                                    <input type="text" class="form-control" name="example-text-input" placeholder="Input mobile no" id="contactPhone" required>
+                                </div>
+                            </div>
+                            <div class="col-xl-4">
+                                <div class="mb-3">
+                                    <label class="form-label required">Customer Email</label>
+                                    <input type="text" class="form-control" name="example-text-input" placeholder="Input customer email" id="contactEmail" required>
+                                </div>
+                            </div>
+                        @*    <div class="col-xl-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Alternate Ref. Email</label>
+                                    <input type="text" class="form-control" name="example-text-input" placeholder="Input alternate ref email" id="altRefEmail">
+                                </div>
+                            </div>*@
+                            <div class="col-xl-4">
+                                <div class="mb-3">
+                                    <label class="form-label required">Project Name</label>
+                                    <input type="text" class="form-control" name="example-text-input" placeholder="Input project name" style="width:100%; height:38px" id="cmbProject" required>
+                                </div>
+                            </div>
+                            <div class="col-xl-4">
+                                <div class="mb-3">
+                                    <label class="form-label ">Project Ref. No.</label>
+                                    <input type="text" class="form-control" name="example-text-input" placeholder="Input project ref no" id="projectRefNo">
+                                </div>
+                            </div>
+                            <div class="col-xl-4">
+                                <div class="mb-3">
+                                    <label class="form-label required">Currency</label>
+                                    <input type="text" class="form-control" name="example-text-input" placeholder="Input address" style="width:100%; height:38px" id="cmbCurrency" required>
+                                </div>
+                            </div>
+                            @*<div class="col-xl-4">
+                                <div class="mb-3">
+                                    <label class="form-label required">Order date</label>
+                                    <input type="date" class="form-control Kdatepicker" name="example-date-input" placeholder="MM/DD/YYYY" style="width:100%; height:38px" id="orderDate" required>
+                                </div>
+                            </div>*@
+
+                           <div class="col-xl-4">
+                                <div class="mb-3">
+                                    <label class="form-label required">Order date</label>
+                                    <input type="text" id="orderDate" class="form-control  Kdatepicker" style="width:100%;height:38px;" placeholder="MM/DD/YYYY">
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-xl-8">
+                                <div class="mb-3">
+                                    <label class="form-label">Note</label>
+                                    <textarea class="form-control" name="example-text-area" placeholder="Enter your remarks here" id="remarks" rows="1"></textarea>
+                                </div>
+                            </div>
+
+                            <!---- start--->
+                            <div style=" padding: 20px; text-align: right;">
+                                <label class="form-label"></label>
+                                    <button id="stepper1_Next" class="btn btn-primary d-none d-sm-inline-block"> Next </button>
+                            </div>
+                            <!---- end --->
+
+                            </div>
+                        </div>
+
+                     
+
+                        <!-- step 2-->
+                        <div class="stepDiv" id="step2Div" style="display: none; margin:20px">
+                            <div class="row">
+                                  <div class="col-xl-4">
+                                        <div class="mb-3">
+                                        <label class="form-label required">Sample Category</label>
+                                        <input type="text" class="form-control" name="example-text-input" placeholder="Input sample name" style="width:100%; height:37px" id="cmbSampleName" required>
+                                     </div>
+                                  </div>
+                                <div class="col-xl-4">
+                                    <div class="mb-3">
+                                    <label class="form-label required">Sample Type</label>
+                                    <input type="text" class="form-control" name="example-text-input" placeholder="Input sample type" style="width:100%; height:37px" id="cmbSampleType" required>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4">
+                                    <div class="mb-3">
+                                        <label class="form-label required">Producer</label>
+                                    <input type="text" class="form-control" name="example-text-input" placeholder="Input producer" id="cmbProducer" style="width:100%; height:37px" required>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4">
+                                    <div class="mb-3">
+                                        <label class="form-label ">Batch/Lot</label>
+                                        <input type="text" class="form-control" name="example-text-input" placeholder="Input batc/lot" id="batchLot" >
+                                    </div>
+                                </div>
+                                 <div class="col-xl-4">
+                                        <div class="mb-3">
+                                            <label class="form-label required">Test Standard</label>
+                                            <input type="text" class="form-control" name="example-text-input" placeholder="Input customer test standard" style="width:100%; height:38px" id="cmbTestStandard" required>
+                                        </div>
+                                    </div>
+
+                                <div class="col-xl-4">
+                                <div class="mb-3" id="myDiv0" style="display: none;">
+                                        <label class="form-label ">Sample Description</label>
+                                    <div id="myDiv" style="display: none;">Minimum <span id="minsamplePcs"></span> PCS, Qty Per Sample <span id="QtyPersample"></span> <span id="MessurementUnit"></span> </div>
+                                    @*<input type="text" class="form-control" name="example-text-input" placeholder="Input measurement" id="cmbMeasurementUnit" style="width:100%; height:37px" required>*@
+                                    </div>
+                                </div>
+
+                               @* <div class="col-xl-4">
+                                    <div class="mb-3">
+                                        <label class="form-label required">Req Number Of Sample Pcs</label>
+                                    <input type="text" class="form-control" name="example-text-input" placeholder="Input reqNumberOfSamplePcs" id="reqNumberOfSamplePcs" style="width:100%; height:37px" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4">
+                                    <div class="mb-3">
+                                        <label class="form-label required">Qty Per Sample</label>
+                                        <input type="text" class="form-control" name="example-text-input" placeholder="Input qtyPerSample" id="qtyPerSample" style="width:100%; height:37px" required>
+                                    </div>
+                                </div>
+                              *@
+
+
+                            <div class="col-xl-8">
+                                <div class="mb-3">
+                                    <label class="form-label">Note</label>
+                                    <textarea class="form-control" name="example-text-area" placeholder="Enter your remarks here" id="note" rows="1"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="mb-3">
+
+                                    <label class="form-label"></label>
+                                    <button id="btnAdd" class="btn btn-success mt-3 mb-3" onclick="AddSampleInfo()">Add</button>
+                                </div>
+                            </div>
+                            <div id="divtestSampleInfoArrBind" class="table-responsive">
+                               @* <table class="table table-vcenter card-table">
+                                    <tr>
+                                        <th>SL</th>
+                                        <th>Sample</th>
+                                        <th>Test Name</th>
+                                        <th>Req. Sample Pcs</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Total</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </table>*@
+                            </div>
+
+
+                            <div style=" padding: 20px; text-align: right;">
+                                <label class="form-label"></label>
+                                <button id="stepper2_Prev" class="btn btn-primary d-none d-sm-inline-block"> Prev </button>
+                                <button id="stepper2_Next" class="btn btn-primary d-none d-sm-inline-block"> Next </button>
+                            </div>
+                            @*<div style=" padding: 20px; text-align: right;">
+                                <label class="form-label"></label>
+                                <button id="stepper1" class="btn btn-primary d-none d-sm-inline-block"> Next </button>
+                            </div>*@
+                       
+                           </div>     
+                        </div>
+                            <!-- step 3-->
+                        <div class="stepDiv" id="step3Div" style="display: none; margin:20px">
+                                <p>Hello 3333333333</p>
+                                <div style=" padding: 20px; text-align: right;">
+                                    <label class="form-label"></label>
+                                    <button id="stepper3_Prev" class="btn btn-primary d-none d-sm-inline-block"> Prev </button>
+                                </div>
+                        </div>
+    @*     test*@
+                   @* <div style=" padding: 20px; text-align: right;">
+                      
+
+                            <label class="form-label"></label>
+                         
+                            <button id="nextButton" class="btn btn-primary d-none d-sm-inline-block"> Next </button>
+                   
+                    </div>*@
+                  
+                 @*     test end*@
+                    </div> 
+                </div>
+            </div>
+    </div>
+</div>
+
+

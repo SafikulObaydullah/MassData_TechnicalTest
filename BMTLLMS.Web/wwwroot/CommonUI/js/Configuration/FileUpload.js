@@ -87,7 +87,7 @@ function FileUploadDataBind(data) {
          },
          {
             
-            field: "documentName", title: "Image", template: '<img src="/Images/#=documentName#">',
+            field: "documentName", title: "Image", template: '<img style="height: 100px; width: 100px;" src="/Images/#=documentName#">',
             width: 100,
             attributes: {
                style: "text-align: left;"
