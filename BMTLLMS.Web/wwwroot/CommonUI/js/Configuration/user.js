@@ -19,8 +19,7 @@ $(document).ready(function () {
       filter: "contains",
       suggest: true,
       placeholder: 'Select Section'
-   });  
-
+   });   
    $("#txtddlUserTypeAttribute").kendoComboBox({
       dataTextField: "name",
       dataValueField: "id",
